@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-image = cv2.imread('image/cat.png', cv2.IMREAD_GRAYSCALE)
-image = cv2.resize(image, (480, 480))
+image = cv2.imread('contour/image/cat.png', cv2.IMREAD_GRAYSCALE)
+image = cv2.resize(image, (500, 500))
 
 _, image_bin = cv2.threshold(image, 0, 255, cv2.THRESH_OTSU)
 

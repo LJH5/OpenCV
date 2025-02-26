@@ -11,5 +11,6 @@ for cnt in contours:
 
 cv2.imshow('image', image)
 cv2.imshow('image_bin', image_bin)
+cv2.imshow('cont_img', cont_img)
 cv2.waitKey()
 cv2.destroyAllWindows()

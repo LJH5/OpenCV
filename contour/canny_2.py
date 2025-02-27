@@ -35,6 +35,7 @@ high_threshold = 175
 edges1 = cv2.Canny(image, low_threshold, high_threshold)
 edges2 = cv2.Canny(blurred, low_threshold, high_threshold)
 edges3 = cv2.Canny(magnitude, low_threshold, high_threshold)
+edges4 = cv2.Canny(magnitude_blurred, low_threshold, high_threshold)
 
 contours, _ = cv2.findContours(edges1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
@@ -43,7 +44,8 @@ for i in range(len(contours)):
 
 cv2.imshow("Canny Edge Origin", edges1)
 cv2.imshow("Canny Edge Blurred", edges2)
-cv2.imshow("Canny Edge Gradiented", edges3)
+cv2.imshow("Canny Edge Magnitude", edges3)
+cv2.imshow("Canny Edge Magnitude Blurred", edges4)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

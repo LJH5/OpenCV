@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 # 이미지 불러오기
 image = cv2.imread('contour/image/cat.png')
@@ -15,10 +14,10 @@ image_bin = cv2.bitwise_not(image_bin)
 contours, _ = cv2.findContours(image_bin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 for contour in contours:
-    # 원래 윤곽선 그리기 (파란색)
+    # contour을 리스트로 넣어 윤곽선 한번에 다 그리기
     cv2.drawContours(image, [contour], -1, (255, 0, 0), 2)
 
-    # 윤곽선 단순화 (epsilon 값 조절)
+    # 윤곽선 단순화, epsilon 값 작을수록 촘촘
     epsilon = 0.005 * cv2.arcLength(contour, True)
     approx = cv2.approxPolyDP(contour, epsilon, True)
 

@@ -28,10 +28,6 @@ cv2.imshow("Edge Dilated", edges_dilated)
 edges_closed = cv2.morphologyEx(edges_dilated, cv2.MORPH_CLOSE, kernel)
 cv2.imshow("Edge Closed", edges_closed)
 
-# 허프 변환을 이용한 선 검출
-lines = cv2.HoughLinesP(edges_closed, 1, np.pi/180, threshold=50, minLineLength=10, maxLineGap=10)
-cv2.imshow("Lines", edges_closed)
-
 # ⬇ 외곽선 찾기 및 그리기
 contours, _ = cv2.findContours(edges_closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 image_contours = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)

@@ -1,17 +1,33 @@
 import cv2
+import numpy as np
 
 # 이미지 불러오기
-image = cv2.imread('contour/image/cat.png')
+image = cv2.imread('contour/image/relay.png')
 image = cv2.resize(image, (500, 500))
 
 image_copy = image.copy()
-image_copy = cv2.cvtColor(image_copy, cv2.COLOR_BGR2GRAY)
 
-_, image_bin = cv2.threshold(image_copy, 0, 255, cv2.THRESH_OTSU)
+# 흑백
+image_gray = cv2.cvtColor(image_copy, cv2.COLOR_BGR2GRAY)
+
+# 블러
+image_blur = cv2.GaussianBlur(image_gray, (7, 7), 0)
+
+
+# 그래디언트
+grad_x = cv2.Sobel(image_blur, cv2.CV_64F, 1, 0, ksize=3)
+grad_y = cv2.Sobel(image_blur, cv2.CV_64F, 0, 1, ksize=3)
+magnitude = np.sqrt(grad_x**2 + grad_y**2)
+magnitude = np.uint8(255 * magnitude / np.max(magnitude))  # 정규화
+cv2.imshow("Gradient Magnitude", magnitude)
+
+# canny
+image_canny = cv2.Canny(magnitude, 0, 50)
+cv2.imshow("image_canny", image_canny)
+
 
 # 윤곽선 검출
-image_bin = cv2.bitwise_not(image_bin)
-contours, _ = cv2.findContours(image_bin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contours, _ = cv2.findContours(image_canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 for contour in contours:
     # contour을 리스트로 넣어 윤곽선 한번에 다 그리기

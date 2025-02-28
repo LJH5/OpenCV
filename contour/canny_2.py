@@ -1,7 +1,7 @@
 import cv2, sys
 import numpy as np
 
-image_path = "contour/image/objects.png"  # 적절한 경로로 수정 필요
+image_path = "contour/image/cat.png"  # 적절한 경로로 수정 필요
 
 # 1. 이미지 불러오기 (그레이스케일 변환)
 image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
@@ -36,11 +36,6 @@ edges1 = cv2.Canny(image, low_threshold, high_threshold)
 edges2 = cv2.Canny(blurred, low_threshold, high_threshold)
 edges3 = cv2.Canny(magnitude, low_threshold, high_threshold)
 edges4 = cv2.Canny(magnitude_blurred, low_threshold, high_threshold)
-
-contours, _ = cv2.findContours(edges1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-
-for i in range(len(contours)):
-    cv2.drawContours(edges1, contours, i, (194, 117, 0), 1, cv2.LINE_AA)
 
 cv2.imshow("Canny Edge Origin", edges1)
 cv2.imshow("Canny Edge Blurred", edges2)

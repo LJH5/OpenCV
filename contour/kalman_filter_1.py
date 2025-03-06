@@ -12,21 +12,39 @@ kalman.errorCovPost = np.eye(4, dtype=np.float32) * 1
 # 외곽선 검출 함수 (예시)
 def detect_contour(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-    edges = cv2.Canny(blurred, 50, 150)
-    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    image_blur = cv2.GaussianBlur(gray, (7, 7), 0)
+
+    # 그래디언트
+    grad_x = cv2.Sobel(image_blur, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y = cv2.Sobel(image_blur, cv2.CV_64F, 0, 1, ksize=3)
+    magnitude = np.sqrt(grad_x**2 + grad_y**2)
+    magnitude = np.uint8(255 * magnitude / np.max(magnitude))  # 정규화
+    cv2.imshow("Gradient Magnitude", magnitude)
+
+    # canny
+    image_canny = cv2.Canny(magnitude, 15, 50)
+    cv2.imshow("image_canny", image_canny)
+
+    # 엣지 연결을 위한 팽창 연산 적용
+    kernel = np.ones((5,5), np.uint8)
+    edges_dilated = cv2.dilate(image_canny, kernel, iterations=2)
+    cv2.imshow("Edge Dilated", edges_dilated)
+
+    # 닫힘 연산 적용
+    edges_closed = cv2.morphologyEx(edges_dilated, cv2.MORPH_CLOSE, kernel)
+    cv2.imshow("Edge Closed", edges_closed)
+
+    contours, _ = cv2.findContours(edges_closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
 # 이미지 로드 및 외곽선 검출
-img = cv2.VideoCapture(0) # 웹캠 입력
+image = cv2.imread("contour/image/relay.png")
+
+image = cv2.resize(image, (300, 300))
 
 while True:
-    ret, frame = img.read()
-
-    if not ret:
-        break
-
-    contours = detect_contour(frame)
+    image_copy = image.copy()
+    contours = detect_contour(image_copy)
 
     if contours:
         contour = max(contours, key=cv2.contourArea) # 가장 큰 외곽선 선택
@@ -42,14 +60,13 @@ while True:
             px, py = int(prediction[0]), int(prediction[1])
 
             # 결과 표시
-            cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)  # 실제 중심점
-            cv2.circle(frame, (px, py), 5, (0, 255, 0), -1)  # 예측 중심점
-            cv2.drawContours(frame, [contour], -1, (255, 0, 0), 2) # 외곽선 표시
+            cv2.circle(image_copy, (cx, cy), 5, (0, 0, 255), -1)  # 실제 중심점
+            cv2.circle(image_copy, (px, py), 5, (0, 255, 0), -1)  # 예측 중심점
+            cv2.drawContours(image_copy, [contour], -1, (255, 0, 0), 2) # 외곽선 표시
 
-    cv2.imshow("Kalman Filter Contour Tracking", frame)
+    cv2.imshow("Kalman Filter Contour Tracking", image_copy)
 
     if cv2.waitKey(30) & 0xFF == 27:
         break
 
-img.release()
 cv2.destroyAllWindows()

@@ -66,6 +66,7 @@ while True:
 
     cv2.imshow("Kalman Filter Contour Tracking", image_copy)
 
+    # Esc 누를 시 종료, 30ms 대기 후 반복문 실행됨
     if cv2.waitKey(30) & 0xFF == 27:
         break
 

@@ -1,7 +1,7 @@
 import cv2
 
 # 이미지 불러오기
-image = cv2.imread('contour/image/cat.png')
+image = cv2.imread('contour/image/bolt.png')
 image = cv2.resize(image, (500, 500))
 
 image_copy = image.copy()

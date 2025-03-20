@@ -22,7 +22,7 @@ ret_4, image_bin_4 = cv2.threshold(image, 80, 255, cv2.THRESH_TOZERO)
 ret_5, image_bin_5 = cv2.threshold(image, 0, 255, cv2.THRESH_TRIANGLE)
 
 # cv2.THRESH_TRUNC: thresh보다 높은 픽셀을 thresh로 변경, 이하는 원본값
-ret_6, image_bin_6 = cv2.threshold(image, 200, 255, cv2.THRESH_TRUNC)
+ret_6, image_bin_6 = cv2.threshold(image, 175, 255, cv2.THRESH_TRUNC)
 
 
 cv2.imshow('Orign', image)

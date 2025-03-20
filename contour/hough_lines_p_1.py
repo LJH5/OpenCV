@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+import random
 
 # 이미지 로드
 image = cv2.imread("contour/image/bolt.png")
@@ -19,13 +19,14 @@ contour_image = np.zeros_like(gray)
 cv2.drawContours(contour_image, contours, -1, (194, 117, 0), 1)
 
 # 직선 검출
-lines = cv2.HoughLinesP(contour_image, 1, (np.pi / 180) * 2, 11, minLineLength=20, maxLineGap=60)
+lines = cv2.HoughLinesP(contour_image, 1, (np.pi / 180), 2, minLineLength=30, maxLineGap=20)
 
 # 결과 표시
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        cv2.line(image_copy, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))  # 랜덤 색상 생성
+        cv2.line(image_copy, (x1, y1), (x2, y2), color, 2)
 
 cv2.imshow("Origin", image)
 cv2.imshow("Detected Contours", contour_image)

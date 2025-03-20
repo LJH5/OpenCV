@@ -1,10 +1,12 @@
 import cv2
 import numpy as np
 
-image = cv2.imread('contour/image/cat.png', cv2.IMREAD_GRAYSCALE)
-image = cv2.resize(image, (500, 500))
+image = cv2.imread('contour/image/cat.png')
 
-_, image_bin = cv2.threshold(image, 0, 255, cv2.THRESH_OTSU)
+image = cv2.resize(image, (500, 500))
+image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+_, image_bin = cv2.threshold(image_gray, 0, 255, cv2.THRESH_OTSU)
 
 image_bin = cv2.bitwise_not(image_bin)
 

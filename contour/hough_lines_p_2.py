@@ -19,10 +19,10 @@ def find_parallel_lines(image_path, angle_tolerance=5):
     cv2.drawContours(contour_image, contours, -1, (194, 117, 0), 1)
 
     # 직선 검출
-    lines = cv2.HoughLinesP(contour_image, 1, (np.pi / 180) * 2, 10, minLineLength=20, maxLineGap=10)
+    lines = cv2.HoughLinesP(contour_image, 1, (np.pi / 180), 20, minLineLength=30, maxLineGap=10)
 
     if lines is not None and len(lines) > 1:
-        # 기울기 계산 및 평행선 그룹화
+        # 직선의 기울기 각도 저장
         slopes = []
         parallel_groups = []
         for line in lines:

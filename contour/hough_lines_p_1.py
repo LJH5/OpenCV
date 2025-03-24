@@ -16,10 +16,11 @@ contours, _ = cv2.findContours(image_bin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NO
 contour_image = np.zeros_like(gray)
 
 # 외곽선 그리기
-cv2.drawContours(contour_image, contours, -1, (194, 117, 0), 1)
+cv2.drawContours(contour_image, contours, -1, (255, 255, 255), 1)
+cv2.drawContours(image_copy, contours, -1, (255, 255, 255), 1)
 
 # 직선 검출
-lines = cv2.HoughLinesP(contour_image, 1, (np.pi / 180), 2, minLineLength=30, maxLineGap=20)
+lines = cv2.HoughLinesP(contour_image, 1, (np.pi / 180), 20, minLineLength=30, maxLineGap=10)
 
 # 결과 표시
 if lines is not None:

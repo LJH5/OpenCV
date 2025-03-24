@@ -18,7 +18,7 @@ for contour in contours:
     cv2.drawContours(image_copy, [contour], -1, (255, 0, 0), 2)
 
     # 윤곽선 단순화, epsilon 값 작을수록 촘촘
-    epsilon = 0.005 * cv2.arcLength(contour, True)
+    epsilon = 0.015 * cv2.arcLength(contour, True)
     approx = cv2.approxPolyDP(contour, epsilon, True)
 
     # 단순화된 윤곽선 그리기 (초록색)

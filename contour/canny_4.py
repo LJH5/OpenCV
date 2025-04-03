@@ -1,7 +1,7 @@
 import cv2, sys
 import numpy as np
 
-def Canny_Edge(image):
+def Canny_Edge(image, low_rate, high_rate):
     if image is None:
         print("Error: 이미지 파일을 찾을 수 없습니다.")
         return
@@ -11,25 +11,27 @@ def Canny_Edge(image):
 
     # cv2.THRESH_OTSU 임계값으로 low, high 설정
     ret, otsu_thresh = cv2.threshold(image_gray, 0, 255, cv2.THRESH_OTSU)
-    low = 0.5 * ret  # Otsu 값의 절반을 Low로1
-    high = 1.5 * ret  # Otsu 값의 1.5배를 High로
+    low = low_rate * ret  # Otsu 값의 절반을 Low로1
+    high = high_rate * ret  # Otsu 값의 1.5배를 High로
     edges_1 = cv2.Canny(image_gray, low, high)
 
     # 이미지 픽셀의 중간값으로 low, high 설정
     median_value = np.median(image_gray)
-    low = int(max(0, 0.5 * median_value))
-    high = int(min(255, 1.5 * median_value))
+    low = int(max(0, low_rate * median_value))
+    high = int(min(255, high_rate * median_value))
     edges_2 = cv2.Canny(image_gray, low, high)
 
 
     return edges_1, edges_2
 
+''' test code
 image_path = "contour/image/cat.png"  # 적절한 경로로 수정 필요
 image = cv2.imread(image_path)
-edges_1, edges_2 = Canny_Edge(image)
+edges_1, edges_2 = Canny_Edge(image, 0.5, 1.5)
 
 cv2.imshow('Edges_1', edges_1)
 cv2.imshow('Edges_2', edges_2)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+'''
